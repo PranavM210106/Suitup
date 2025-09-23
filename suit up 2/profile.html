@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuitUp - Profile</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4; }
+        header { background:#333; color:white; padding:1em 2em; display:flex; justify-content:space-between; align-items:center; }
+        header a { color:white; text-decoration:none; margin-left:1em; }
+        nav a:hover { text-decoration:underline; }
+        h2 { text-align:center; margin:2em 0 1em; }
+        .profile-container { width:90%; max-width:600px; margin:0 auto 2em; background:white; padding:2em; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+        .profile-container p { margin:0.5em 0; font-weight:bold; }
+        .profile-container input { width:100%; padding:0.5em; margin:0.3em 0 1em 0; border-radius:5px; border:1px solid #ccc; }
+        .save-btn { display:block; width:100%; padding:1em; margin-top:1em; background:#333; color:white; text-align:center; text-decoration:none; border-radius:5px; }
+        .save-btn:hover { background:#555; }
+        table { width:100%; border-collapse:collapse; margin-top:2em; }
+        th, td { padding:0.8em; border-bottom:1px solid #ddd; text-align:center; }
+        th { background:#555; color:white; }
+        tr:last-child td { border-bottom:none; }
+        footer { background:#333; color:white; text-align:center; padding:1em; margin-top:2em; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SuitUp</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="cart.html">Cart</a>
+        <a href="wishlist.html">Wishlist</a>
+        <a href="profile.html">Profile</a>
+    </nav>
+</header>
+
+<h2>Your Profile</h2>
+
+<div class="profile-container">
+    <p>Name:</p>
+    <input type="text" value="John Doe" disabled>
+
+    <p>Email:</p>
+    <input type="email" value="john@example.com" disabled>
+
+    <p>Phone:</p>
+    <input type="text" value="+91 9876543210" disabled>
+
+    <a href="#" class="save-btn">Save Changes</a>
+
+    <h2 style="margin-top:2em;">Past Orders</h2>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price (INR)</th>
+            <th>Total (INR)</th>
+        </tr>
+        <tr><td>Classic Suit</td><td>1</td><td>15,000</td><td>15,000</td></tr>
+        <tr><td>Modern Suit</td><td>1</td><td>18,000</td><td>18,000</td></tr>
+        <tr><td>Silk Tie</td><td>2</td><td>1,500</td><td>3,000</td></tr>
+        <tr><td>Leather Belt</td><td>1</td><td>2,000</td><td>2,000</td></tr>
+        <tr><td>Formal Shoes</td><td>1</td><td>5,500</td><td>5,500</td></tr>
+    </table>
+</div>
+
+<footer>
+    &copy; 2025 SuitUp. All rights reserved.
+</footer>
+
+</body>
+</html>

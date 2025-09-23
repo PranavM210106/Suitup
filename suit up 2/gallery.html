@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuitUp - Gallery</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4; }
+        header { background:#333; color:white; padding:1em 2em; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; }
+        header a { color:white; text-decoration:none; margin-left:1em; }
+        nav a:hover { text-decoration:underline; }
+        h2 { text-align:center; margin:2em 0 1em; }
+        .gallery-nav { text-align:center; margin-bottom:2em; }
+        .gallery-nav a { margin:0 1em; text-decoration:none; color:#333; font-weight:bold; }
+        .gallery-nav a:hover { text-decoration:underline; }
+        .gallery-section { width:90%; margin:0 auto 3em; }
+        .items { display:flex; flex-wrap:wrap; gap:2em; justify-content:center; }
+        .item-card { background:white; padding:1em; border-radius:10px; width:200px; box-shadow:0 0 10px rgba(0,0,0,0.1); text-align:center; }
+        .item-card img { width:100%; border-radius:5px; }
+        .item-card p { margin:0.5em 0; }
+        footer { background:#333; color:white; text-align:center; padding:1em; margin-top:2em; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>SuitUp</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="cart.html">Cart</a>
+        <a href="wishlist.html">Wishlist</a>
+        <a href="profile.html">Profile</a>
+    </nav>
+</header>
+
+<div class="gallery-nav">
+    <a href="#suits">Suits</a>
+    <a href="#fabrics">Fabrics</a>
+    <a href="#accessories">Accessories</a>
+</div>
+
+<!-- Suits Section -->
+<section id="suits" class="gallery-section">
+    <h2>Suits</h2>
+    <div class="items">
+        <div class="item-card">
+            <img src="images/suit1.jpg" alt="Classic Navy Suit">
+            <p>Classic Navy Suit</p>
+            <p>₹1,10,990</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit2.jpg" alt="Midnight Blue Tuxedo">
+            <p>Midnight Blue Tuxedo</p>
+            <p>₹1,80,990</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit3.jpg" alt="Charcoal Wool Suit">
+            <p>Charcoal Wool Suit</p>
+            <p>₹2,50,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit4.jpg" alt="Italian Silk Suit">
+            <p>Italian Silk Suit</p>
+            <p>₹1,70,500</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit5.jpg" alt="Oxford Gray Suit">
+            <p>Oxford Gray Suit</p>
+            <p>₹2,80,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit6.jpg" alt="Black Velvet Tuxedo">
+            <p>Black Valvet Tuxedo</p>
+            <p>₹3,12,990</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit7.jpg" alt="Pinstripe Wool Suit">
+            <p>Pinstripe Wool Suit</p>
+            <p>₹1,30,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit8.jpg" alt="Burgundy Valvet Blazer">
+            <p>Burgundy Valvet Blazer</p>
+            <p>₹1,60,500</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit9.jpg" alt="Double Brested Navy">
+            <p>Double Brested Navy</p>
+            <p>₹1,40,500</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit10.jpg" alt="Emerald velevt Tuxedo">
+            <p>Emerald valvet Tuxedo</p>
+            <p>₹3,20,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit11.jpg" alt="Brown Tweed Suit">
+            <p>Brown Tweed Suit</p>
+            <p>₹1,35,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/suit12.jpg" alt="Platinum Silk Tuxedo">
+            <p>Platinum Silk Tuxedo</p>
+            <p>₹2,13,500</p>
+        </div>
+    </div>
+</section>
+
+<!-- Fabrics Section -->
+<section id="fabrics" class="gallery-section">
+    <h2>Fabrics</h2>
+    <div class="items">
+        <div class="item-card">
+            <img src="images/fabric1.jpg" alt="Italian Silk">
+            <p>Italian Silk</p>
+            <p>₹80,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/fabric2.jpg" alt="Cashmere Wool">
+            <p>Casmera Wool</p>
+            <p>₹70,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/fabric3.jpg" alt="Premium Linen Blend">
+            <p>Premium Linner Blend</p>
+            <p>₹50,000</p>
+        </div>
+ <div class="item-card">
+            <img src="images/fabric4.jpg" alt="Velevt">
+            <p>Velevt</p>
+            <p>₹60,000</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Accessories Section -->
+<section id="accessories" class="gallery-section">
+    <h2>Accessories</h2>
+    <div class="items">
+        <div class="item-card">
+            <img src="images/tie1.jpg" alt="Silk Tie">
+            <p>Silk Tie</p>
+            <p>₹15,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/belt1.jpg" alt="Leather Belt">
+            <p>Leather Belt</p>
+            <p>₹20,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/shoes1.jpg" alt="Formal Shoes">
+            <p>Formal Shoes</p>
+            <p>₹55,500</p>
+        </div>
+        <div class="item-card">
+            <img src="images/watch1.jpg" alt="Luxury Watch">
+            <p>Luxury Watch</p>
+            <p>₹12,20,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/cufflinks1.jpg" alt="Gold Cufflinks">
+            <p>Gold Cufflinks</p>
+            <p>₹30,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/pocket1.jpg" alt="Pocket Square">
+            <p>Pocket Square</p>
+            <p>₹10,200</p>
+        </div>
+        <div class="item-card">
+            <img src="images/shoes2.jpg" alt="Casual Shoes">
+            <p>Casual Shoes</p>
+            <p>₹45,500</p>
+        </div>
+        <div class="item-card">
+            <img src="images/bag1.jpg" alt="Leather Bag">
+            <p>Leather Bag</p>
+            <p>₹60,000</p>
+        </div>
+        <div class="item-card">
+            <img src="images/hat1.jpg" alt="Designer Hat">
+            <p>Designer Hat</p>
+            <p>₹12,500</p>
+        </div>
+        <div class="item-card">
+            <img src="images/scarf1.jpg" alt="Silk Scarf">
+            <p>Silk Scarf</p>
+            <p>₹1,10,800</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    &copy; 2025 SuitUp. All rights reserved.
+</footer>
+
+</body>
+</html>
