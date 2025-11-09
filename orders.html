@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SuitUp Admin · Orders</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{ --bg:#0f1116; --panel:#171a21; --panel-2:#1c2029; }
+    body{ background:var(--bg); color:#e9eef6; }
+    .sidebar{ background:var(--panel); min-height:100vh; border-right:1px solid #2a2f3a; position:sticky; top:0; }
+    .nav-link{ color:#cfd8e3; }
+    .nav-link.active,.nav-link:hover{ color:#fff; background:var(--panel-2); border-radius:.5rem; }
+    .card-panel{ background:var(--panel); border:1px solid #2a2f3a; border-radius:.9rem; }
+    .kpi{ background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid #2a2f3a; border-radius:.9rem; padding:1rem 1.25rem; }
+    .kpi .value{ font-size:1.75rem; font-weight:700; }
+    .searchbar{ background:var(--panel); border:1px solid #2a2f3a; border-radius:.6rem; }
+    .pill{ border:1px solid #2a2f3a; border-radius:999px; padding:.2rem .55rem; font-size:.78rem; }
+    .avatar{ width:28px; height:28px; border-radius:50%; background:#2b3240; display:inline-flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; color:#b9c5d8; }
+    @media (max-width: 991.98px){ .sidebar{ position:static; min-height:auto; } }
+  </style>
+</head>
+<body>
+
+  <div class="container-fluid">
+    <div class="row g-0">
+
+      <!-- SIDEBAR -->
+      <nav class="col-lg-2 col-md-3 p-3 p-lg-4 sidebar">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <span class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width:28px;height:28px;background:#2b3240;">
+              <i class="bi bi-scissors"></i>
+            </span>
+            <span class="fw-bold">SuitUp Admin</span>
+          </div>
+          <button class="btn btn-outline-light d-md-none" data-bs-toggle="collapse" data-bs-target="#sideLinks"><i class="bi bi-list"></i></button>
+        </div>
+
+        <div id="sideLinks" class="collapse d-md-block mt-4">
+          <ul class="nav flex-column gap-1">
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="inventory.html"><i class="bi bi-box-seam me-2"></i>Inventory</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="styles.html"><i class="bi bi-rulers me-2"></i>Styles</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2 active" href="orders.html"><i class="bi bi-bag-check me-2"></i>Orders</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="customers.html"><i class="bi bi-people me-2"></i>Customers</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="settings.html"><i class="bi bi-gear me-2"></i>Settings</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="crud.html"><i class="bi bi-table me-2"></i>CRUD</a></li>
+          </ul>
+          <hr class="border-secondary-subtle">
+          <a class="btn btn-outline-danger w-100" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+        </div>
+      </nav>
+
+      <!-- MAIN -->
+      <main class="col-lg-10 col-md-9 p-4 p-lg-5">
+
+        <!-- Header -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+          <div>
+            <h1 class="h3 mb-1">Orders</h1>
+            <div class="text-secondary">Pipeline, statuses and fulfilment</div>
+          </div>
+          <div class="d-flex gap-2">
+            <div class="input-group searchbar">
+              <span class="input-group-text bg-transparent border-0"><i class="bi bi-search"></i></span>
+              <input id="search" class="form-control bg-transparent border-0" placeholder="Search by order #, customer…">
+            </div>
+            <a class="btn btn-primary" href="crud.html#t_checkout"><i class="bi bi-plus-lg me-2"></i>Create Order</a>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="row g-3 g-lg-4 mb-4">
+          <div class="col-6 col-lg-3"><div class="kpi h-100">
+            <div class="text-secondary">Orders (7d)</div>
+            <div class="value mt-1" id="k7d">—</div>
+            <div class="small text-secondary">week-on-week</div>
+          </div></div>
+          <div class="col-6 col-lg-3"><div class="kpi h-100">
+            <div class="text-secondary">Pending</div>
+            <div class="value mt-1" id="kPending">—</div>
+            <div class="small text-warning">awaiting action</div>
+          </div></div>
+          <div class="col-6 col-lg-3"><div class="kpi h-100">
+            <div class="text-secondary">Avg. Fulfilment</div>
+            <div class="value mt-1" id="kSLA">—</div>
+            <div class="small text-secondary">days</div>
+          </div></div>
+          <div class="col-6 col-lg-3"><div class="kpi h-100">
+            <div class="text-secondary">AOV</div>
+            <div class="value mt-1">₹ <span id="kAOV">—</span></div>
+            <div class="small text-secondary">avg order value</div>
+          </div></div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-7">
+            <div class="card-panel p-3 p-lg-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Orders by Day</h2>
+                <span class="pill">Last 30 days</span>
+              </div>
+              <canvas id="ordersChart" height="180"></canvas>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="card-panel p-3 p-lg-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">AOV Trend</h2>
+                <span class="pill">₹ per order</span>
+              </div>
+              <canvas id="aovChart" height="180"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card-panel p-3 p-lg-4 mb-4">
+          <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+              <label class="form-label">Status</label>
+              <select id="fltStatus" class="form-select">
+                <option value="">All</option>
+                <option>Pending</option>
+                <option>In Production</option>
+                <option>Ready to Ship</option>
+                <option>Completed</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Customer</label>
+              <input id="fltCustomer" class="form-control" placeholder="Name or email">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Date Range</label>
+              <div class="input-group">
+                <input id="fltFrom" type="date" class="form-control">
+                <span class="input-group-text">to</span>
+                <input id="fltTo" type="date" class="form-control">
+              </div>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+              <button id="applyFilters" class="btn btn-primary w-100"><i class="bi bi-funnel me-2"></i>Apply</button>
+              <button id="resetFilters" class="btn btn-outline-secondary w-100">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="card-panel p-3 p-lg-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0">Orders</h2>
+            <button id="exportCsv" class="btn btn-sm btn-outline-secondary"><i class="bi bi-download me-2"></i>Export CSV</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-middle" id="ordersTable">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Customer</th>
+                  <th>Items</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Placed</th>
+                  <th>ETA</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // --- Demo data ---
+    const orders = [
+      { id:'SU-10472', customer:'Arjun Mehta', items:'2× Custom Suit (Slim), 1× Shirt', total:58600, status:'In Production', placed:'2025-11-08', eta:'2025-11-14' },
+      { id:'SU-10469', customer:'Sana Shaikh', items:'1× Tuxedo (Classic)', total:34900, status:'Ready to Ship', placed:'2025-11-07', eta:'2025-11-10' },
+      { id:'SU-10461', customer:'Ravi Kumar', items:'1× Custom Suit (Athletic), 2× Shirt', total:49200, status:'Pending', placed:'2025-11-02', eta:'2025-11-13' },
+      { id:'SU-10455', customer:'Neha Patel', items:'1× Suit, 1× Waistcoat', total:41750, status:'Completed', placed:'2025-11-01', eta:'2025-11-06' },
+      { id:'SU-10452', customer:'Jai Khanna', items:'3× Shirt', total:7950, status:'In Production', placed:'2025-11-03', eta:'2025-11-12' },
+      { id:'SU-10438', customer:'Rahul Jain', items:'1× Casual Blazer', total:18990, status:'Pending', placed:'2025-10-30', eta:'2025-11-09' }
+    ];
+
+    // --- KPIs ---
+    function setKPIs(list){
+      // Orders in last 7 days
+      const now = new Date('2025-11-09'); // fixed for demo; replace with new Date() in real app
+      const weekAgo = new Date(now); weekAgo.setDate(now.getDate()-7);
+      const last7 = list.filter(o => new Date(o.placed) >= weekAgo);
+      document.getElementById('k7d').textContent = last7.length;
+
+      document.getElementById('kPending').textContent = list.filter(o=>o.status==='Pending').length;
+
+      // Simple SLA: avg days between placed and eta
+      const sla = Math.round(list.reduce((s,o)=> s + ((new Date(o.eta)-new Date(o.placed))/(1000*3600*24)), 0)/list.length);
+      document.getElementById('kSLA').textContent = sla;
+
+      // AOV
+      const aov = Math.round(list.reduce((s,o)=>s+o.total,0) / list.length);
+      document.getElementById('kAOV').textContent = aov.toLocaleString('en-IN');
+    }
+
+    // --- Filters ---
+    function filterData(){
+      const q = document.getElementById('search').value.toLowerCase();
+      const st = document.getElementById('fltStatus').value;
+      const cust = document.getElementById('fltCustomer').value.toLowerCase();
+      const from = document.getElementById('fltFrom').value ? new Date(document.getElementById('fltFrom').value) : null;
+      const to = document.getElementById('fltTo').value ? new Date(document.getElementById('fltTo').value) : null;
+
+      return orders.filter(o=>{
+        const okQ = (o.id.toLowerCase().includes(q) || o.customer.toLowerCase().includes(q));
+        const okS = st ? o.status===st : true;
+        const okC = cust ? o.customer.toLowerCase().includes(cust) : true;
+        const d = new Date(o.placed);
+        const okFrom = from ? d >= from : true;
+        const okTo = to ? d <= to : true;
+        return okQ && okS && okC && okFrom && okTo;
+      });
+    }
+
+    // --- Table ---
+    function renderTable(list){
+      const tb = document.querySelector('#ordersTable tbody'); tb.innerHTML='';
+      list.forEach(o=>{
+        const tr = document.createElement('tr');
+        const badge = o.status==='Completed' ? 'text-bg-success' :
+                      o.status==='Ready to Ship' ? 'text-bg-primary' :
+                      o.status==='In Production' ? 'text-bg-warning' : 'text-bg-secondary';
+        tr.innerHTML = `
+          <td><a class="link-light fw-semibold" href="#">${o.id}</a></td>
+          <td><span class="avatar me-2">${o.customer.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</span>${o.customer}</td>
+          <td>${o.items}</td>
+          <td>₹ ${o.total.toLocaleString('en-IN')}</td>
+          <td><span class="badge ${badge}">${o.status}</span></td>
+          <td>${o.placed}</td>
+          <td>${o.eta}</td>
+          <td><button class="btn btn-sm btn-outline-light">Open</button></td>`;
+        tb.appendChild(tr);
+      });
+    }
+
+    // --- Charts ---
+    let ordersChart, aovChart;
+    function buildCharts(){
+      // Fake series for last 30 days
+      const labels = Array.from({length:30}, (_,i)=> i+1); // 1..30
+      const ordersSeries = [3,2,4,5,3,6,4,3,5,6,4,7,5,6,4,3,5,7,6,5,4,6,7,8,6,5,7,6,8,9];
+      const aovSeries = [32000,34000,33000,36000,35500,37000,38000,36500,39000,40000,39500,41000,40500,42000,41500,43000,42500,44000,44500,43800,45000,45500,46000,47000,46500,48000,48500,49000,49500,50000];
+
+      ordersChart = new Chart(document.getElementById('ordersChart'),{
+        type:'bar',
+        data:{ labels, datasets:[{ label:'Orders', data:ordersSeries }]},
+        options:{ plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true } } }
+      });
+
+      aovChart = new Chart(document.getElementById('aovChart'),{
+        type:'line',
+        data:{ labels, datasets:[{ label:'AOV', data:aovSeries, tension:.35, fill:false }]},
+        options:{ plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:false } } }
+      });
+    }
+
+    // Update charts could be wired to filtered list if you keep timeseries per order; demo stays static
+
+    // --- Export CSV ---
+    document.getElementById('exportCsv').addEventListener('click', ()=>{
+      const rows = [['Order #','Customer','Items','Total (INR)','Status','Placed','ETA']];
+      document.querySelectorAll('#ordersTable tbody tr').forEach(tr=>{
+        rows.push([...tr.children].slice(0,7).map(td=>td.innerText.replace('₹ ','').replace(/,/g,'')));
+      });
+      const csv = rows.map(r=>r.join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'orders.csv'; a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    // --- Wire up ---
+    function apply(){
+      const list = filterData();
+      setKPIs(list); renderTable(list);
+    }
+    document.getElementById('applyFilters').addEventListener('click', apply);
+    document.getElementById('resetFilters').addEventListener('click', ()=>{
+      document.getElementById('search').value='';
+      document.getElementById('fltStatus').value='';
+      document.getElementById('fltCustomer').value='';
+      document.getElementById('fltFrom').value='';
+      document.getElementById('fltTo').value='';
+      apply();
+    });
+    document.getElementById('search').addEventListener('input', apply);
+
+    // --- Init ---
+    setKPIs(orders); renderTable(orders); buildCharts();
+  </script>
+</body>
+</html>

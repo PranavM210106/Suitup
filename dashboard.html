@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SuitUp Admin · Inventory & Orders</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #0f1116;
+      --panel: #171a21;
+      --panel-2:#1c2029;
+      --muted:#9fb3c8;
+      --accent:#75b6ff;
+      --success:#36d399;
+      --warn:#ffd166;
+      --danger:#ff6b6b;
+    }
+    body{ background:var(--bg); color:#e9eef6; }
+    .sidebar{
+      background:var(--panel);
+      min-height:100vh;
+      border-right:1px solid #2a2f3a;
+      position:sticky; top:0;
+    }
+    .brand{ letter-spacing:.5px; }
+    .nav-link{ color:#cfd8e3; }
+    .nav-link.active,.nav-link:hover{ color:white; background:var(--panel-2); border-radius:.5rem; }
+    .kpi{
+      background:linear-gradient(180deg, var(--panel), var(--panel-2));
+      border:1px solid #2a2f3a; border-radius:.9rem;
+      padding:1.25rem;
+      box-shadow:0 8px 24px rgba(0,0,0,.25);
+    }
+    .kpi .value{ font-size:2rem; font-weight:700; }
+    .kpi .trend.up{ color:var(--success); }
+    .kpi .trend.down{ color:var(--danger); }
+    .card-panel{
+      background:var(--panel);
+      border:1px solid #2a2f3a;
+      border-radius:.9rem;
+    }
+    .table thead th{ color:#a8b4c6; font-weight:600; letter-spacing:.02em; }
+    .status-badge{ font-weight:600; }
+    .progress{ height:.6rem; background:#303646; }
+    .progress-bar{ font-size:.65rem; }
+    .avatar{
+      width:28px; height:28px; border-radius:50%;
+      background:#2b3240; display:inline-flex; align-items:center; justify-content:center;
+      font-size:.8rem; font-weight:700; color:#b9c5d8;
+    }
+    .searchbar{
+      background:var(--panel); border:1px solid #2a2f3a; border-radius:.6rem;
+    }
+    @media (max-width: 991.98px){ .sidebar{ position:static; min-height:auto; } }
+  </style>
+</head>
+<body>
+
+  <div class="container-fluid">
+    <div class="row g-0">
+
+      <!-- SIDEBAR -->
+      <nav class="col-lg-2 col-md-3 p-3 p-lg-4 sidebar">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <span class="avatar"><i class="bi bi-scissors"></i></span>
+            <span class="fw-bold brand">SuitUp Admin</span>
+          </div>
+          <button class="btn btn-outline-light d-md-none" data-bs-toggle="collapse" data-bs-target="#sideLinks"><i class="bi bi-list"></i></button>
+        </div>
+        <div id="sideLinks" class="collapse d-md-block mt-4">
+          <ul class="nav flex-column gap-1">
+            <!-- Set .active based on the current page -->
+            <li class="nav-item"><a class="nav-link px-3 py-2 active" href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="inventory.html"><i class="bi bi-box-seam me-2"></i>Inventory</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="styles.html"><i class="bi bi-rulers me-2"></i>Styles</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="orders.html"><i class="bi bi-bag-check me-2"></i>Orders</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="customers.html"><i class="bi bi-people me-2"></i>Customers</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="settings.html"><i class="bi bi-gear me-2"></i>Settings</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="crud.html"><i class="bi bi-table me-2"></i>CRUD</a></li>
+          </ul>
+          <hr class="border-secondary-subtle">
+          <a class="btn btn-outline-danger w-100" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+        </div>
+      </nav>
+
+      <!-- MAIN -->
+      <main class="col-lg-10 col-md-9 p-4 p-lg-5">
+
+        <!-- Topbar -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+          <div>
+            <h1 class="h3 mb-1">Inventory & Orders</h1>
+            <div class="text-secondary">Live overview for the last 30 days</div>
+          </div>
+          <div class="d-flex gap-2">
+            <div class="input-group searchbar">
+              <span class="input-group-text bg-transparent border-0"><i class="bi bi-search"></i></span>
+              <input class="form-control bg-transparent border-0" placeholder="Search orders, SKUs, customers..." />
+            </div>
+            <a class="btn btn-primary" href="orders.html"><i class="bi bi-plus-lg me-2"></i>New Order</a>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="row g-3 g-lg-4 mb-4">
+          <div class="col-6 col-lg-3">
+            <div class="kpi h-100">
+              <div class="d-flex justify-content-between">
+                <div class="text-secondary">Total SKUs</div>
+                <i class="bi bi-archive fs-5 text-secondary"></i>
+              </div>
+              <div class="value mt-1">1,284</div>
+              <div class="small text-secondary">+32 new this month <span class="trend up ms-1"><i class="bi bi-arrow-up-right"></i> 2.6%</span></div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="kpi h-100">
+              <div class="d-flex justify-content-between">
+                <div class="text-secondary">Materials In Stock</div>
+                <i class="bi bi-bricks fs-5 text-secondary"></i>
+              </div>
+              <div class="value mt-1">18,460</div>
+              <div class="small text-secondary">Avg. 27 days cover</div>
+              <div class="progress mt-2">
+                <div class="progress-bar bg-info" style="width:72%">72%</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="kpi h-100">
+              <div class="d-flex justify-content-between">
+                <div class="text-secondary">Accessories In Stock</div>
+                <i class="bi bi-gem fs-5 text-secondary"></i>
+              </div>
+              <div class="value mt-1">9,210</div>
+              <div class="small text-secondary">Reorder at 25%</div>
+              <div class="progress mt-2">
+                <div class="progress-bar bg-success" style="width:84%">84%</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="kpi h-100">
+              <div class="d-flex justify-content-between">
+                <div class="text-secondary">Orders Pending</div>
+                <i class="bi bi-hourglass-split fs-5 text-secondary"></i>
+              </div>
+              <div class="value mt-1">47</div>
+              <div class="small text-secondary">SLA <span class="fw-semibold text-warning">8h</span> average <span class="trend down ms-1"><i class="bi bi-arrow-down-right"></i> 6%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two columns: Inventory snapshot + Low stock -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-8">
+            <div class="card-panel p-3 p-lg-4 h-100">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Inventory Snapshot</h2>
+                <div class="btn-group">
+                  <button class="btn btn-sm btn-outline-secondary active">This week</button>
+                  <button class="btn btn-sm btn-outline-secondary">This month</button>
+                </div>
+              </div>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3 border border-secondary-subtle">
+                    <div class="d-flex justify-content-between">
+                      <div class="fw-semibold">Fabrics</div>
+                      <span class="badge text-bg-info">72% full</span>
+                    </div>
+                    <div class="display-6 fw-bold mt-2">6,420 m</div>
+                    <div class="small text-secondary">Inbound PO: <span class="text-info">+1,200 m</span> ETA 3d</div>
+                    <div class="progress mt-3"><div class="progress-bar bg-info" style="width:72%"></div></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3 border border-secondary-subtle">
+                    <div class="d-flex justify-content-between">
+                      <div class="fw-semibold">Lining</div>
+                      <span class="badge text-bg-warning">43% full</span>
+                    </div>
+                    <div class="display-6 fw-bold mt-2">2,160 m</div>
+                    <div class="small text-secondary">Usage: 320 m / wk</div>
+                    <div class="progress mt-3"><div class="progress-bar bg-warning" style="width:43%"></div></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3 border border-secondary-subtle">
+                    <div class="d-flex justify-content-between">
+                      <div class="fw-semibold">Buttons</div>
+                      <span class="badge text-bg-success">84% full</span>
+                    </div>
+                    <div class="display-6 fw-bold mt-2">28,400 pcs</div>
+                    <div class="small text-secondary">Avg lead: 9d</div>
+                    <div class="progress mt-3"><div class="progress-bar bg-success" style="width:84%"></div></div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="p-3 rounded-3 border border-secondary-subtle">
+                    <div class="d-flex justify-content-between">
+                      <div class="fw-semibold">Thread</div>
+                      <span class="badge text-bg-danger">19% full</span>
+                    </div>
+                    <div class="display-6 fw-bold mt-2">3,150 spools</div>
+                    <div class="small text-secondary">Reorder recommended</div>
+                    <div class="progress mt-3"><div class="progress-bar bg-danger" style="width:19%"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Low stock list -->
+          <div class="col-lg-4">
+            <div class="card-panel p-3 p-lg-4 h-100">
+              <h2 class="h5 mb-3">Low Stock Alerts</h2>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                  Navy Thread #402
+                  <span>
+                    <span class="badge rounded-pill text-bg-danger me-2">19%</span>
+                    <button class="btn btn-sm btn-outline-light">Reorder</button>
+                  </span>
+                </li>
+                <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                  Lining — Charcoal
+                  <span>
+                    <span class="badge rounded-pill text-bg-warning me-2">43%</span>
+                    <button class="btn btn-sm btn-outline-light">Reorder</button>
+                  </span>
+                </li>
+                <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                  Shoulder Pads (M)
+                  <span>
+                    <span class="badge rounded-pill text-bg-warning me-2">38%</span>
+                    <button class="btn btn-sm btn-outline-light">Reorder</button>
+                  </span>
+                </li>
+                <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                  Zippers — Silver 22cm
+                  <span>
+                    <span class="badge rounded-pill text-bg-danger me-2">12%</span>
+                    <button class="btn btn-sm btn-outline-light">Reorder</button>
+                  </span>
+                </li>
+              </ul>
+              <div class="small text-secondary mt-3"><i class="bi bi-info-circle me-1"></i>Threshold set to 40% of max bin level.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders table -->
+        <div class="card-panel p-3 p-lg-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0">Recent Orders</h2>
+            <div class="d-flex gap-2">
+              <select class="form-select form-select-sm w-auto">
+                <option selected>Status: All</option>
+                <option>Pending</option>
+                <option>In Production</option>
+                <option>Ready to Ship</option>
+                <option>Completed</option>
+              </select>
+              <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-download me-2"></i>Export CSV</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Customer</th>
+                  <th>Items</th>
+                  <th>Total</th>
+                  <th>Stage</th>
+                  <th>ETA</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="#" class="link-light fw-semibold">SU-10472</a></td>
+                  <td><span class="avatar me-2">AM</span>Arjun Mehta</td>
+                  <td>2× Custom Suit (Slim), 1× Shirt</td>
+                  <td>₹ 58,600</td>
+                  <td><span class="badge status-badge text-bg-warning"><i class="bi bi-gear-wide-connected me-1"></i>In Production</span></td>
+                  <td>Nov 14</td>
+                  <td><button class="btn btn-sm btn-outline-light">Open</button></td>
+                </tr>
+                <tr>
+                  <td><a href="#" class="link-light fw-semibold">SU-10469</a></td>
+                  <td><span class="avatar me-2">SS</span>Sana Shaikh</td>
+                  <td>1× Tuxedo (Classic)</td>
+                  <td>₹ 34,900</td>
+                  <td><span class="badge status-badge text-bg-primary"><i class="bi bi-box-seam me-1"></i>Ready to Ship</span></td>
+                  <td>Nov 10</td>
+                  <td><button class="btn btn-sm btn-outline-light">Open</button></td>
+                </tr>
+                <tr>
+                  <td><a href="#" class="link-light fw-semibold">SU-10461</a></td>
+                  <td><span class="avatar me-2">RK</span>Ravi Kumar</td>
+                  <td>1× Custom Suit (Athletic), 2× Shirt</td>
+                  <td>₹ 49,200</td>
+                  <td><span class="badge status-badge text-bg-secondary"><i class="bi bi-clock me-1"></i>Pending</span></td>
+                  <td>Nov 13</td>
+                  <td><button class="btn btn-sm btn-outline-light">Open</button></td>
+                </tr>
+                <tr>
+                  <td><a href="#" class="link-light fw-semibold">SU-10455</a></td>
+                  <td><span class="avatar me-2">NP</span>Neha Patel</td>
+                  <td>1× Suit, 1× Waistcoat</td>
+                  <td>₹ 41,750</td>
+                  <td><span class="badge status-badge text-bg-success"><i class="bi bi-check2-circle me-1"></i>Completed</span></td>
+                  <td>Nov 06</td>
+                  <td><button class="btn btn-sm btn-outline-light">Open</button></td>
+                </tr>
+                <tr>
+                  <td><a href="#" class="link-light fw-semibold">SU-10452</a></td>
+                  <td><span class="avatar me-2">JK</span>Jai Khanna</td>
+                  <td>3× Shirt</td>
+                  <td>₹ 7,950</td>
+                  <td><span class="badge status-badge text-bg-warning"><i class="bi bi-gear-wide-connected me-1"></i>In Production</span></td>
+                  <td>Nov 12</td>
+                  <td><button class="btn btn-sm btn-outline-light">Open</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="text-secondary small">Showing 5 of 47 pending • Avg fulfillment: 2.1 days</div>
+            <nav aria-label="Orders pagination">
+              <ul class="pagination pagination-sm mb-0">
+                <li class="page-item disabled"><a class="page-link">Prev</a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Optional: auto-activate current sidebar item based on URL filename -->
+  <script>
+    (function(){
+      const path = location.pathname.split('/').pop().toLowerCase();
+      document.querySelectorAll('.sidebar .nav-link').forEach(a=>{
+        const href = a.getAttribute('href')?.toLowerCase();
+        a.classList.toggle('active', href && path && href.endsWith(path));
+      });
+    })();
+  </script>
+</body>
+</html>

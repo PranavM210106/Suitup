@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SuitUp Admin · Inventory</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{ --bg:#0f1116; --panel:#171a21; --panel-2:#1c2029; }
+    body{ background:var(--bg); color:#e9eef6; }
+    .sidebar{ background:var(--panel); min-height:100vh; border-right:1px solid #2a2f3a; position:sticky; top:0; }
+    .nav-link{ color:#cfd8e3; }
+    .nav-link.active,.nav-link:hover{ color:#fff; background:var(--panel-2); border-radius:.5rem; }
+    .card-panel{ background:var(--panel); border:1px solid #2a2f3a; border-radius:.9rem; }
+    .kpi{ background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid #2a2f3a; border-radius:.9rem; padding:1rem 1.25rem; }
+    .kpi .value{ font-size:1.75rem; font-weight:700; }
+    .searchbar{ background:var(--panel); border:1px solid #2a2f3a; border-radius:.6rem; }
+    .pill{ border:1px solid #2a2f3a; border-radius:999px; padding:.2rem .55rem; font-size:.78rem; }
+    .progress{ height:.6rem; background:#303646; }
+    .progress-bar{ font-size:.65rem; }
+    @media (max-width: 991.98px){ .sidebar{ position:static; min-height:auto; } }
+  </style>
+</head>
+<body>
+
+  <div class="container-fluid">
+    <div class="row g-0">
+
+      <!-- SIDEBAR -->
+      <nav class="col-lg-2 col-md-3 p-3 p-lg-4 sidebar">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <span class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width:28px;height:28px;background:#2b3240;">
+              <i class="bi bi-scissors"></i>
+            </span>
+            <span class="fw-bold">SuitUp Admin</span>
+          </div>
+          <button class="btn btn-outline-light d-md-none" data-bs-toggle="collapse" data-bs-target="#sideLinks"><i class="bi bi-list"></i></button>
+        </div>
+
+        <div id="sideLinks" class="collapse d-md-block mt-4">
+          <ul class="nav flex-column gap-1">
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2 active" href="inventory.html"><i class="bi bi-box-seam me-2"></i>Inventory</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="styles.html"><i class="bi bi-rulers me-2"></i>Styles</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="orders.html"><i class="bi bi-bag-check me-2"></i>Orders</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="customers.html"><i class="bi bi-people me-2"></i>Customers</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="settings.html"><i class="bi bi-gear me-2"></i>Settings</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="crud.html"><i class="bi bi-table me-2"></i>CRUD</a></li>
+          </ul>
+          <hr class="border-secondary-subtle">
+          <a class="btn btn-outline-danger w-100" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+        </div>
+      </nav>
+
+      <!-- MAIN -->
+      <main class="col-lg-10 col-md-9 p-4 p-lg-5">
+
+        <!-- Header -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+          <div>
+            <h1 class="h3 mb-1">Inventory</h1>
+            <div class="text-secondary">Stock levels, coverage, and low-stock alerts</div>
+          </div>
+          <div class="d-flex gap-2">
+            <div class="input-group searchbar">
+              <span class="input-group-text bg-transparent border-0"><i class="bi bi-search"></i></span>
+              <input id="search" class="form-control bg-transparent border-0" placeholder="Search SKU, product, supplier…">
+            </div>
+            <a class="btn btn-primary" href="crud.html#t_inventory"><i class="bi bi-plus-lg me-2"></i>New Item</a>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="row g-3 g-lg-4 mb-4">
+          <div class="col-6 col-lg-3"><div class="kpi h-100">
+            <div class="text-secondary">Total SKUs</div>
+            <div class="value mt-1" id="kSkus">—</div>
+            <div class="small text-secondary">Active and trackable</div>
+          </div></div>
+          <div class="col-6 col-lg-3"><div class="kpi h-100">
+            <div class="text-secondary">Units In Stock</div>
+            <div class="value mt-1" id="kUnits">—</div>
+            <div class="small text-secondary">All categories</div>
+          </div></div>
+          <div class="col-6 col-lg-3"><div class="kpi h-100">
+            <div class="text-secondary">Avg. Coverage</div>
+            <div class="value mt-1" id="kCover">—</div>
+            <div class="small text-secondary">days at current usage</div>
+          </div></div>
+          <div class="col-6 col-lg-3"><div class="kpi h-100">
+            <div class="text-secondary">Low Stock</div>
+            <div class="value mt-1" id="kLow">—</div>
+            <div class="small text-warning">below threshold</div>
+          </div></div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-6">
+            <div class="card-panel p-3 p-lg-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Stock Coverage</h2>
+                <span class="pill">Days of cover</span>
+              </div>
+              <canvas id="coverageChart" height="180"></canvas>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card-panel p-3 p-lg-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Category Mix</h2>
+                <span class="pill">Current stock</span>
+              </div>
+              <canvas id="mixChart" height="180"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card-panel p-3 p-lg-4 mb-4">
+          <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+              <label class="form-label">Category</label>
+              <select id="fltCat" class="form-select">
+                <option value="">All</option>
+                <option>Fabric</option>
+                <option>Lining</option>
+                <option>Buttons</option>
+                <option>Thread</option>
+                <option>Zippers</option>
+                <option>Accessories</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Status</label>
+              <select id="fltStatus" class="form-select">
+                <option value="">All</option>
+                <option>OK</option>
+                <option>Low</option>
+                <option>Out</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Supplier</label>
+              <input id="fltSupplier" class="form-control" placeholder="e.g. Textura Mills">
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+              <button id="applyFilters" class="btn btn-primary w-100"><i class="bi bi-funnel me-2"></i>Apply</button>
+              <button id="resetFilters" class="btn btn-outline-secondary w-100">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Low Stock Alerts -->
+        <div class="card-panel p-3 p-lg-4 mb-4">
+          <h2 class="h6 mb-3">Low Stock Alerts</h2>
+          <div id="lowList" class="row g-3"></div>
+        </div>
+
+        <!-- Inventory Table -->
+        <div class="card-panel p-3 p-lg-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0">Inventory List</h2>
+            <button id="exportCsv" class="btn btn-sm btn-outline-secondary"><i class="bi bi-download me-2"></i>Export CSV</button>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-middle" id="invTable">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>SKU</th>
+                  <th>Category</th>
+                  <th>Supplier</th>
+                  <th>Bin</th>
+                  <th>Qty</th>
+                  <th>Status</th>
+                  <th>Coverage</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // --- Demo dataset ---
+    const items = [
+      { product:'Navy Wool 110s', sku:'FAB-NAV-402', category:'Fabric', supplier:'Textura Mills', bin:'F1', qty:640, status:'OK', cover:28 },
+      { product:'Charcoal Lining', sku:'LIN-CH-021', category:'Lining', supplier:'Royal Looms', bin:'L3', qty:210, status:'Low', cover:12 },
+      { product:'Buttons — Brown 18mm', sku:'BTN-BR-18', category:'Buttons', supplier:'Zenith Textiles', bin:'A1', qty:28400, status:'OK', cover:40 },
+      { product:'Zipper — Silver 22cm', sku:'ZIP-SL-22', category:'Zippers', supplier:'Zenith Textiles', bin:'B4', qty:120, status:'Low', cover:9 },
+      { product:'Thread — Navy #402', sku:'THR-N-402', category:'Thread', supplier:'Royal Looms', bin:'T2', qty:3150, status:'Low', cover:7 },
+      { product:'Pocket Squares — Silk', sku:'ACC-PS-SK', category:'Accessories', supplier:'Textura Mills', bin:'C2', qty:560, status:'OK', cover:24 }
+    ];
+
+    // --- KPIs ---
+    function setKPIs(list){
+      document.getElementById('kSkus').textContent = list.length;
+      document.getElementById('kUnits').textContent = list.reduce((s,r)=>s+r.qty,0).toLocaleString('en-IN');
+      document.getElementById('kCover').textContent = Math.round(list.reduce((s,r)=>s+r.cover,0)/list.length);
+      document.getElementById('kLow').textContent = list.filter(r=>r.status!=='OK').length;
+    }
+
+    // --- Filters ---
+    function filterData(){
+      const q = document.getElementById('search').value.toLowerCase();
+      const cat = document.getElementById('fltCat').value;
+      const st = document.getElementById('fltStatus').value;
+      const sup = document.getElementById('fltSupplier').value.toLowerCase();
+
+      return items.filter(it =>
+        (it.product.toLowerCase().includes(q) || it.sku.toLowerCase().includes(q)) &&
+        (cat ? it.category===cat : true) &&
+        (st ? it.status===st : true) &&
+        (sup ? it.supplier.toLowerCase().includes(sup) : true)
+      );
+    }
+
+    // --- Table + Low list ---
+    function renderTable(list){
+      const tb = document.querySelector('#invTable tbody'); tb.innerHTML='';
+      list.forEach(it=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${it.product}</td>
+          <td>${it.sku}</td>
+          <td>${it.category}</td>
+          <td>${it.supplier}</td>
+          <td>${it.bin}</td>
+          <td>${it.qty.toLocaleString('en-IN')}</td>
+          <td><span class="badge ${it.status==='OK'?'text-bg-success':(it.status==='Low'?'text-bg-warning':'text-bg-danger')}">${it.status}</span></td>
+          <td>
+            <div class="progress">
+              <div class="progress-bar ${it.cover>=20?'bg-success':(it.cover>=10?'bg-warning':'bg-danger')}" style="width:${Math.min(100, it.cover*2)}%">${it.cover}d</div>
+            </div>
+          </td>`;
+        tb.appendChild(tr);
+      });
+    }
+
+    function renderLow(list){
+      const wrap = document.getElementById('lowList'); wrap.innerHTML='';
+      list.filter(it=>it.status!=='OK').forEach(it=>{
+        const col = document.createElement('div'); col.className='col-12 col-md-6';
+        col.innerHTML = `
+          <div class="p-3 rounded border border-secondary-subtle">
+            <div class="d-flex justify-content-between">
+              <div>
+                <div class="fw-semibold">${it.product}</div>
+                <div class="text-secondary small">${it.sku} • ${it.category} • ${it.supplier}</div>
+              </div>
+              <span class="badge ${it.status==='Low'?'text-bg-warning':'text-bg-danger'}">${it.status}</span>
+            </div>
+            <div class="d-flex align-items-center gap-2 mt-2">
+              <div class="progress w-100"><div class="progress-bar ${it.cover>=10?'bg-warning':'bg-danger'}" style="width:${Math.min(100,it.cover*2)}%">${it.cover}d</div></div>
+              <button class="btn btn-sm btn-outline-light" onclick="alert('Draft PO created for ${it.sku}')">Reorder</button>
+            </div>
+          </div>`;
+        wrap.appendChild(col);
+      });
+    }
+
+    // --- Charts ---
+    let coverageChart, mixChart;
+    function buildCharts(list){
+      const ctx1 = document.getElementById('coverageChart');
+      const ctx2 = document.getElementById('mixChart');
+      const labels = list.map(i=>i.sku);
+      const cover = list.map(i=>i.cover);
+      const catLabels = [...new Set(list.map(i=>i.category))];
+      const catQtys = catLabels.map(c => list.filter(i=>i.category===c).reduce((s,r)=>s+r.qty,0));
+
+      coverageChart = new Chart(ctx1, { type:'bar',
+        data:{ labels, datasets:[{ label:'Days of cover', data:cover }]},
+        options:{ plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true } } }
+      });
+
+      mixChart = new Chart(ctx2, { type:'doughnut',
+        data:{ labels: catLabels, datasets:[{ data: catQtys }]},
+        options:{ plugins:{ legend:{ position:'bottom' } } }
+      });
+    }
+
+    function updateCharts(list){
+      coverageChart.data.labels = list.map(i=>i.sku);
+      coverageChart.data.datasets[0].data = list.map(i=>i.cover);
+      coverageChart.update();
+
+      const catLabels = [...new Set(list.map(i=>i.category))];
+      mixChart.data.labels = catLabels;
+      mixChart.data.datasets[0].data = catLabels.map(c => list.filter(i=>i.category===c).reduce((s,r)=>s+r.qty,0));
+      mixChart.update();
+    }
+
+    // --- Export CSV ---
+    document.getElementById('exportCsv').addEventListener('click', ()=>{
+      const rows = [['Product','SKU','Category','Supplier','Bin','Qty','Status','Coverage (days)']];
+      document.querySelectorAll('#invTable tbody tr').forEach(tr=>{
+        const cols = [...tr.children].slice(0,8).map(td=>td.innerText.replace(/\s*d$/,''));
+        rows.push(cols);
+      });
+      const csv = rows.map(r=>r.join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'inventory.csv'; a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    // --- Wire up ---
+    function apply(){
+      const filtered = filterData();
+      setKPIs(filtered); renderTable(filtered); renderLow(filtered); updateCharts(filtered);
+    }
+    document.getElementById('applyFilters').addEventListener('click', apply);
+    document.getElementById('resetFilters').addEventListener('click', ()=>{
+      document.getElementById('search').value='';
+      document.getElementById('fltCat').value='';
+      document.getElementById('fltStatus').value='';
+      document.getElementById('fltSupplier').value='';
+      apply();
+    });
+    document.getElementById('search').addEventListener('input', apply);
+
+    // --- Init ---
+    setKPIs(items); renderTable(items); renderLow(items); buildCharts(items);
+  </script>
+</body>
+</html>

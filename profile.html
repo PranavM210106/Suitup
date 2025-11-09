@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SuitUp - Profile</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f4f4; }
+    header { background:#333; color:white; padding:1em 2em; display:flex; justify-content:space-between; align-items:center; }
+    header a { color:white; text-decoration:none; margin-left:1em; }
+    nav a:hover { text-decoration:underline; }
+    h2 { text-align:center; margin:2em 0 1em; }
+    .profile-container { width:90%; max-width:600px; margin:0 auto 2em; background:white; padding:2em; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+    .profile-container p { margin:0.5em 0; font-weight:bold; }
+    .profile-container input { width:100%; padding:0.5em; margin:0.3em 0 0.3em 0; border-radius:5px; border:1px solid #ccc; }
+    .save-btn, .btn-outline { display:block; width:100%; padding:1em; margin-top:1em; border-radius:5px; cursor:pointer; }
+    .save-btn { background:#333; color:white; border:none; }
+    .save-btn:hover { background:#555; }
+    .btn-outline { background:#fff; border:1px solid #333; color:#333; }
+    .btn-outline:hover { background:#f2f2f2; }
+    table { width:100%; border-collapse:collapse; margin-top:2em; }
+    th, td { padding:0.8em; border-bottom:1px solid #ddd; text-align:center; }
+    th { background:#555; color:white; }
+    tr:last-child td { border-bottom:none; }
+    footer { background:#333; color:white; text-align:center; padding:1em; margin-top:2em; }
+
+    /* validation feedback (used by JS) */
+    .error { color:#d32f2f; font-size:0.9em; margin-bottom:0.6em; display:none; }
+    .invalid { border-color:#d32f2f !important; background:#fff7f7; }
+    .success-banner {
+      display:none; margin-top:1em; padding:0.8em 1em; border-radius:6px;
+      background:#e7f6ed; color:#1b5e20; border:1px solid #aed9c6; font-weight:600;
+    }
+    .actions { display:flex; gap:0.6em; align-items:center; }
+    @media (max-width:480px){ .actions { flex-direction:column; } .btn-outline, .save-btn { width:100%; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>SuitUp</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="cart.html">Cart</a>
+    <a href="wishlist.html">Wishlist</a>
+    <a href="profile.html">Profile</a>
+  </nav>
+</header>
+
+<h2>Your Profile</h2>
+
+<div class="profile-container" role="form" aria-labelledby="profile-title">
+  <div id="profile-title" class="visually-hidden" aria-hidden="true">Profile Form</div>
+
+  <p>Name:</p>
+  <input id="name" type="text" value="John Doe" aria-describedby="nameErr">
+  <div id="nameErr" class="error">Please enter 2–60 letters (letters, spaces, ., ', - allowed).</div>
+
+  <p>Email:</p>
+  <input id="email" type="email" value="john@example.com" aria-describedby="emailErr">
+  <div id="emailErr" class="error">Please enter a valid email address (e.g., name@example.com).</div>
+
+  <p>Phone:</p>
+  <input id="phone" type="text" value="+91 9876543210" aria-describedby="phoneErr">
+  <div id="phoneErr" class="error">Enter a valid Indian number: +91 9876543210, 09876543210, or 9876543210.</div>
+
+  <div class="actions">
+    <button id="saveBtn" class="save-btn" type="button">Save Changes</button>
+  </div>
+
+  <div id="successBanner" class="success-banner" role="status" aria-live="polite">
+    ✅ Profile saved successfully.
+  </div>
+
+  <h2 style="margin-top:2em;">Past Orders</h2>
+  <table aria-label="Past Orders">
+    <tr>
+      <th>Item</th><th>Quantity</th><th>Price (INR)</th><th>Total (INR)</th>
+    </tr>
+    <tr><td>Classic Suit</td><td>1</td><td>15,000</td><td>15,000</td></tr>
+    <tr><td>Modern Suit</td><td>1</td><td>18,000</td><td>18,000</td></tr>
+    <tr><td>Silk Tie</td><td>2</td><td>1,500</td><td>3,000</td></tr>
+    <tr><td>Leather Belt</td><td>1</td><td>2,000</td><td>2,000</td></tr>
+    <tr><td>Formal Shoes</td><td>1</td><td>5,500</td><td>5,500</td></tr>
+  </table>
+</div>
+
+<footer>&copy; 2025 SuitUp. All rights reserved.</footer>
+
+<!-- External validation -->
+<script src="profile-validation.js" defer></script>
+</body>
+</html>

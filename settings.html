@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SuitUp Admin · Settings</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0f1116; --panel:#171a21; --panel-2:#1c2029;
+    }
+    body{ background:var(--bg); color:#e9eef6; }
+    .sidebar{
+      background:var(--panel); min-height:100vh; border-right:1px solid #2a2f3a; position:sticky; top:0;
+    }
+    .nav-link{ color:#cfd8e3; }
+    .nav-link.active,.nav-link:hover{ color:#fff; background:var(--panel-2); border-radius:.5rem; }
+    .card-panel{ background:var(--panel); border:1px solid #2a2f3a; border-radius:.9rem; }
+    .section-title{ font-weight:700; letter-spacing:.2px; }
+    .upload-box{
+      border:1px dashed #3a4356; border-radius:.75rem; padding:1rem; text-align:center; cursor:pointer;
+    }
+    .upload-box:hover{ background:#121622; }
+    .form-hint{ color:#9fb3c8; font-size:.9rem; }
+  </style>
+</head>
+<body>
+
+  <div class="container-fluid">
+    <div class="row g-0">
+
+      <!-- SIDEBAR -->
+      <nav class="col-lg-2 col-md-3 p-3 p-lg-4 sidebar">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <span class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width:28px;height:28px;background:#2b3240;">
+              <i class="bi bi-scissors"></i>
+            </span>
+            <span class="fw-bold">SuitUp Admin</span>
+          </div>
+          <button class="btn btn-outline-light d-md-none" data-bs-toggle="collapse" data-bs-target="#sideLinks"><i class="bi bi-list"></i></button>
+        </div>
+
+        <div id="sideLinks" class="collapse d-md-block mt-4">
+          <ul class="nav flex-column gap-1">
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="dashboard.html"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="inventory.html"><i class="bi bi-box-seam me-2"></i>Inventory</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="styles.html"><i class="bi bi-rulers me-2"></i>Styles</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="orders.html"><i class="bi bi-bag-check me-2"></i>Orders</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="customers.html"><i class="bi bi-people me-2"></i>Customers</a></li>
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="settings.html"><i class="bi bi-gear me-2"></i>Settings</a></li>
+            <!-- NEW: CRUD at the end -->
+            <li class="nav-item"><a class="nav-link px-3 py-2" href="crud.html"><i class="bi bi-table me-2"></i>CRUD</a></li>
+          </ul>
+          <hr class="border-secondary-subtle">
+          <a class="btn btn-outline-danger w-100" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+        </div>
+      </nav>
+
+      <!-- MAIN -->
+      <main class="col-lg-10 col-md-9 p-4 p-lg-5">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+          <div>
+            <h1 class="h3 mb-1">Settings</h1>
+            <div class="text-secondary">Configure your storefront, content, and operations</div>
+          </div>
+          <div class="d-flex gap-2">
+            <button id="btnSaveAll" class="btn btn-primary"><i class="bi bi-save2 me-2"></i>Save All</button>
+            <button class="btn btn-outline-secondary"><i class="bi bi-arrow-repeat me-2"></i>Reset</button>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-4" id="settingsTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab">
+              <i class="bi bi-info-circle me-1"></i> About Us
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#homepage" type="button" role="tab">
+              <i class="bi bi-image me-1"></i> Home Page
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#styles" type="button" role="tab">
+              <i class="bi bi-rulers me-1"></i> Styles
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#materials" type="button" role="tab">
+              <i class="bi bi-bricks me-1"></i> Materials
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#checkout" type="button" role="tab">
+              <i class="bi bi-credit-card me-1"></i> Checkout
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab">
+              <i class="bi bi-clipboard-data me-1"></i> Inventory
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+
+          <!-- ABOUT US -->
+          <section class="tab-pane fade show active" id="about" role="tabpanel">
+            <div class="card-panel p-3 p-lg-4">
+              <h2 class="h5 section-title mb-3">Company Profile</h2>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Brand Name</label>
+                  <input type="text" class="form-control" value="SuitUp Tailoring Co.">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Support Email</label>
+                  <input type="email" class="form-control" value="support@suitup.com">
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">Short Tagline</label>
+                  <input type="text" class="form-control" value="Made-to-measure suits crafted in 72 hours.">
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">About Us Content</label>
+                  <textarea class="form-control" rows="5">We are a Mumbai-based bespoke tailoring studio blending traditional craftsmanship with modern fits. Every suit is measured, cut, and finished in-house.</textarea>
+                  <div class="form-hint mt-1">Shown on /about and footer.</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Address</label>
+                  <input type="text" class="form-control" value="Fort, Mumbai, India">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Phone</label>
+                  <input type="text" class="form-control" value="+91 22 5555 1234">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">WhatsApp</label>
+                  <input type="text" class="form-control" value="+91 90000 12345">
+                </div>
+                <div class="col-12 d-flex gap-2 mt-2">
+                  <button class="btn btn-primary"><i class="bi bi-save2 me-2"></i>Save About</button>
+                  <button class="btn btn-outline-secondary">Preview</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- HOMEPAGE -->
+          <section class="tab-pane fade" id="homepage" role="tabpanel">
+            <div class="card-panel p-3 p-lg-4">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 section-title mb-0">Hero & Banners</h2>
+                <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                  <i class="bi bi-cloud-arrow-up me-1"></i> Upload Images
+                </button>
+              </div>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Hero Title</label>
+                  <input class="form-control" value="Tailored for your story">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Hero Subtitle</label>
+                  <input class="form-control" value="Premium fabrics. Perfect fit. Delivered fast.">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Hero Button Text</label>
+                  <input class="form-control" value="Start Customising">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Hero Button Link</label>
+                  <input class="form-control" value="/customise">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Show Announcement Bar</label>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" checked>
+                    <label class="form-check-label">Enable (Free alterations on first order)</label>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="border-secondary-subtle my-4">
+
+              <h3 class="h6 mb-3">Active Banners</h3>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="p-3 rounded upload-box">
+                    <i class="bi bi-card-image fs-2 d-block mb-2"></i>
+                    <div class="fw-semibold">Winter Collection</div>
+                    <div class="text-secondary small">1920×640 • /winter</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="p-3 rounded upload-box">
+                    <i class="bi bi-card-image fs-2 d-block mb-2"></i>
+                    <div class="fw-semibold">Wedding Edit</div>
+                    <div class="text-secondary small">1920×640 • /wedding</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="p-3 rounded upload-box">
+                    <i class="bi bi-card-image fs-2 d-block mb-2"></i>
+                    <div class="fw-semibold">Corporate Fits</div>
+                    <div class="text-secondary small">1920×640 • /corporate</div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <button class="btn btn-primary"><i class="bi bi-save2 me-2"></i>Save Home Page</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- STYLES -->
+          <section class="tab-pane fade" id="styles" role="tabpanel">
+            <div class="card-panel p-3 p-lg-4">
+              <h2 class="h5 section-title mb-3">Style Options</h2>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label">Fit Types</label>
+                  <select class="form-select" multiple>
+                    <option selected>Slim</option>
+                    <option selected>Classic</option>
+                    <option>Athletic</option>
+                    <option>Relaxed</option>
+                  </select>
+                  <div class="form-hint">Hold Ctrl/Cmd to multi-select</div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Lapels</label>
+                  <select class="form-select" multiple>
+                    <option selected>Notch</option>
+                    <option>Peak</option>
+                    <option>Shawl</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Buttons</label>
+                  <select class="form-select">
+                    <option>1-Button</option>
+                    <option selected>2-Button</option>
+                    <option>Double-breasted (6)</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Default Measurements Unit</label>
+                  <div class="btn-group w-100" role="group">
+                    <input type="radio" class="btn-check" name="unit" id="u1" checked>
+                    <label class="btn btn-outline-light" for="u1">Centimeters</label>
+                    <input type="radio" class="btn-check" name="unit" id="u2">
+                    <label class="btn btn-outline-light" for="u2">Inches</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Enable Try-On Scheduling</label>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" checked>
+                    <label class="form-check-label">Customers can book fittings</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <button class="btn btn-primary"><i class="bi bi-save2 me-2"></i>Save Styles</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- MATERIALS -->
+          <section class="tab-pane fade" id="materials" role="tabpanel">
+            <div class="card-panel p-3 p-lg-4">
+              <h2 class="h5 section-title mb-3">Materials Settings</h2>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label">Reorder Threshold (Fabrics)</label>
+                  <div class="input-group">
+                    <input type="number" class="form-control" value="40">
+                    <span class="input-group-text">%</span>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Default Supplier</label>
+                  <select class="form-select">
+                    <option selected>Textura Mills</option>
+                    <option>Royal Looms</option>
+                    <option>Zenith Textiles</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Lead Time (days)</label>
+                  <input type="number" class="form-control" value="9">
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">Auto Reorder</label>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox">
+                    <label class="form-check-label">Create draft POs when below threshold</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <button class="btn btn-primary"><i class="bi bi-save2 me-2"></i>Save Materials</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- CHECKOUT -->
+          <section class="tab-pane fade" id="checkout" role="tabpanel">
+            <div class="card-panel p-3 p-lg-4">
+              <h2 class="h5 section-title mb-3">Checkout & Payments</h2>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label">Currency</label>
+                  <select class="form-select">
+                    <option selected>INR (₹)</option>
+                    <option>USD ($)</option>
+                    <option>EUR (€)</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Tax Rate</label>
+                  <div class="input-group">
+                    <input type="number" class="form-control" value="18">
+                    <span class="input-group-text">%</span>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Shipping Flat Rate</label>
+                  <div class="input-group">
+                    <span class="input-group-text">₹</span>
+                    <input type="number" class="form-control" value="199">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Payment Methods</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="pm1" checked><label for="pm1" class="form-check-label">UPI</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="pm2" checked><label for="pm2" class="form-check-label">Credit/Debit Cards</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="pm3"><label for="pm3" class="form-check-label">Cash on Delivery</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Order Notes</label>
+                  <textarea class="form-control" rows="4" placeholder="Shown at checkout">Prefer slim sleeves unless otherwise specified.</textarea>
+                </div>
+              </div>
+              <div class="mt-3">
+                <button class="btn btn-primary"><i class="bi bi-save2 me-2"></i>Save Checkout</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- INVENTORY -->
+          <section class="tab-pane fade" id="inventory" role="tabpanel">
+            <div class="card-panel p-3 p-lg-4">
+              <h2 class="h5 section-title mb-3">Inventory Preferences</h2>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label">Stock Visibility</label>
+                  <select class="form-select">
+                    <option selected>Show exact stock</option>
+                    <option>Show “Low/Medium/High”</option>
+                    <option>Hide stock level</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Backorders</label>
+                  <select class="form-select">
+                    <option>Disallow</option>
+                    <option selected>Allow with message</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Safety Stock (%)</label>
+                  <div class="input-group">
+                    <input type="number" class="form-control" value="10">
+                    <span class="input-group-text">%</span>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="inv1" checked>
+                    <label for="inv1" class="form-check-label">Sync inventory with POS</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <button class="btn btn-primary"><i class="bi bi-save2 me-2"></i>Save Inventory</button>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Upload Modal -->
+  <div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark border-secondary">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-cloud-arrow-up me-2"></i>Upload Banner Images</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="upload-box">
+            <input type="file" class="form-control" accept="image/*" multiple>
+            <div class="text-secondary small mt-2">Recommended: 1920×640 JPG/WEBP • &lt; 600 KB each</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary">Upload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Toast -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+    <div id="saveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          <i class="bi bi-check2-circle me-2"></i>Settings saved successfully.
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Demo: show toast on Save All
+    document.getElementById('btnSaveAll').addEventListener('click', () => {
+      const toastEl = document.getElementById('saveToast');
+      const toast = new bootstrap.Toast(toastEl, { delay: 2000 });
+      toast.show();
+    });
+
+    // Auto-activate the current sidebar link based on URL filename
+    (function(){
+      const path = location.pathname.split('/').pop().toLowerCase();
+      document.querySelectorAll('.sidebar .nav-link').forEach(a=>{
+        const href = a.getAttribute('href')?.toLowerCase();
+        a.classList.toggle('active', href && path && href.endsWith(path));
+      });
+    })();
+  </script>
+</body>
+</html>
